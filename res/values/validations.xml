@@ -1,0 +1,5 @@
+<resources>
+    <string name="required_email">Please type the email address</string>
+    <string name="invalid_email">Please type a valid email address</string>
+    <string name="required_password">Please type your password</string>
+</resources>

@@ -1,0 +1,8 @@
+<resources>
+    <color name="list_item_drawer_title">#FFFFFF</color>
+    <color name="list_item_drawer_bg">#AA303030</color>
+    <color name="list_item_drawer_bg_activated">#AA992416</color>
+    <color name="list_item_drawer_divider">#272727</color>
+    <color name="counter_text_bg">#AA626262</color>
+    <color name="counter_text_color">#C5C4C4</color>
+</resources>
