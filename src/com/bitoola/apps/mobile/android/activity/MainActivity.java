@@ -12,7 +12,7 @@ public class MainActivity extends SingleFragmentDrawerActivity {
 		return LoginFragment.newInstance();
 	}
 	
-	@Override
+	@Override 
 	protected Integer getDefaultFragmentPosition() {
 		return 0;
 	}

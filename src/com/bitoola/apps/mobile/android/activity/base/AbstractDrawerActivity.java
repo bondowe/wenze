@@ -121,23 +121,13 @@ public abstract class AbstractDrawerActivity extends AbstractActivity {
     }
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
 
-		switch (item.getItemId()) {
-		case R.id.action_settings:
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -145,6 +135,7 @@ public abstract class AbstractDrawerActivity extends AbstractActivity {
 
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
 		menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+		
 		return super.onPrepareOptionsMenu(menu);
 	}
 
