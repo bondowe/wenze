@@ -6,6 +6,9 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
+    
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:allowBackup="true"
@@ -18,17 +21,23 @@
             android:authorities="com.bitoola.apps.mobile.android.provider.DefaultSearchRecentSuggestionsProvider" >
         </provider>
         
+		<meta-data android:name="android.app.default_searchable" android:value=".activity.SearchableActivity" />
+        
         <activity 
             android:name=".activity.LoginActivity" >
         </activity>
         
         <activity
             android:name=".activity.MainActivity" >
+        </activity>
+        
+        <activity
+            android:name=".activity.BarcodeScannerActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.default_searchable" android:value=".activity.SearchableActivity" />
         </activity>
         
         <activity
