@@ -78,15 +78,25 @@ public class BarcodeScannerFragment extends Fragment {
 	
 	private Size getBestSupportedSize(List<Size> sizes, int width, int height) {
 		
-		Size bestSize = sizes.get(0);
-		int largestArea = bestSize.width * bestSize.height;
+		Size bestSize = null;
+		int largestArea = 0;
+		int area = 0;
 		
 		for (Size size : sizes) {
-			int area = size.width * size.height;
-			if (area > largestArea) {
+			if(size.width > width || size.height > height) {
+				continue;
+			}
+			
+			area = size.width * size.height;
+			
+			if (largestArea < area) {
 				bestSize = size;
 				largestArea = area;
 			}
+		}
+		
+		if(bestSize == null) {
+			bestSize = sizes.get(0);
 		}
 		
 		return bestSize;
@@ -117,9 +127,11 @@ public class BarcodeScannerFragment extends Fragment {
 			Size size = getBestSupportedSize(parameters.getSupportedPreviewSizes(), width, height);
 			
 			parameters.setPreviewSize(size.width, size.height);
+			
 			mCamera.setParameters(parameters);
 			
 			try {
+				mCamera.setDisplayOrientation(90);
 				mCamera.startPreview();
 			} catch (Exception e) {
 				Log.e(LOG_TAG, "Could not start preview", e);
