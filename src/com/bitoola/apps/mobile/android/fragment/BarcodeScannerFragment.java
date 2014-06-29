@@ -7,6 +7,8 @@ import com.bitoola.apps.mobile.android.R;
 
 import android.annotation.TargetApi;
 import android.hardware.Camera;
+import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 public class BarcodeScannerFragment extends Fragment {
 	
@@ -24,6 +27,8 @@ public class BarcodeScannerFragment extends Fragment {
 	
 	private Camera mCamera;
 	private SurfaceView mSurfaceView;
+	private Button mBarcodeScannerButton;
+	private View mProgressContainerView;
 	
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	@Override
@@ -57,6 +62,19 @@ public class BarcodeScannerFragment extends Fragment {
 		
 		setUpSurfaceHolder();
 		
+		mProgressContainerView = v.findViewById(R.id.progress_container_view);
+		
+		mProgressContainerView.setVisibility(View.INVISIBLE);
+		
+		mBarcodeScannerButton = (Button)v.findViewById(R.id.barcode_scan_button);
+		
+		mBarcodeScannerButton.setOnClickListener(new View.OnClickListener() {	
+			@Override
+			public void onClick(View v) {
+				takePicture();
+			}
+		});
+		
 		return v;
 	}
 	
@@ -74,6 +92,30 @@ public class BarcodeScannerFragment extends Fragment {
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
 		surfaceHolder.addCallback(new SurfaceHolderCallback());
+	}
+	
+	private void takePicture() {
+		
+		ShutterCallback shutterCallback = new ShutterCallback() {
+			
+			@Override
+			public void onShutter() {
+				mProgressContainerView.setVisibility(View.VISIBLE);
+			}
+		};
+		
+		PictureCallback pictureCallback = new PictureCallback() {
+			
+			@Override
+			public void onPictureTaken(byte[] data, Camera camera) {
+				
+				
+				mProgressContainerView.setVisibility(View.INVISIBLE);
+				mCamera.startPreview();
+			}
+		};
+		
+		mCamera.takePicture(shutterCallback, null, pictureCallback);
 	}
 	
 	private Size getBestSupportedSize(List<Size> sizes, int width, int height) {
@@ -124,9 +166,12 @@ public class BarcodeScannerFragment extends Fragment {
 			}
 			
 			Camera.Parameters parameters = mCamera.getParameters();
-			Size size = getBestSupportedSize(parameters.getSupportedPreviewSizes(), width, height);
 			
+			Size size = getBestSupportedSize(parameters.getSupportedPreviewSizes(), width, height);
 			parameters.setPreviewSize(size.width, size.height);
+			
+			size = getBestSupportedSize(parameters.getSupportedPictureSizes(), width, height);
+			parameters.setPictureSize(size.width, size.height);
 			
 			mCamera.setParameters(parameters);
 			
